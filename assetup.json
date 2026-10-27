@@ -1,7 +1,7 @@
 
 {
   "id": "com.madhav.modifyasset",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "Modify Asset",
   "description": "Modify and delete existing asset members and their properties in SAP Analytics Cloud Planning",
   "newInstancePrefix": "ModifyAsset",
@@ -34,15 +34,14 @@
     },
     "getData": {
       "returnType": "string",
-      "description": "Returns the currently loaded asset members and their editable properties as serialized JSON."
+      "description": "Returns all loaded asset rows as serialized JSON."
     },
     "setData": {
-      "description": "Loads existing asset members and their properties into the widget.",
+      "description": "Loads asset rows into the widget.",
       "parameters": [
         {
           "name": "data",
-          "type": "string",
-          "description": "Serialized JSON array containing existing asset IDs and their properties."
+          "type": "string"
         }
       ]
     },
@@ -51,27 +50,53 @@
       "parameters": [
         {
           "name": "rowIndex",
-          "type": "integer",
-          "description": "Zero-based row index."
+          "type": "integer"
         },
         {
           "name": "fieldName",
-          "type": "string",
-          "description": "Technical field name."
+          "type": "string"
         },
         {
           "name": "value",
-          "type": "string",
-          "description": "New property value."
+          "type": "string"
         }
       ]
     },
     "getSelectedData": {
       "returnType": "string",
-      "description": "Returns the selected asset rows as serialized JSON."
+      "description": "Returns selected asset rows as serialized JSON."
+    },
+    "getModifiedData": {
+      "returnType": "string",
+      "description": "Returns modified asset rows as serialized JSON."
+    },
+    "setOptions": {
+      "description": "Sets dropdown options for a field.",
+      "parameters": [
+        {
+          "name": "fieldName",
+          "type": "string"
+        },
+        {
+          "name": "rawOptions",
+          "type": "string"
+        }
+      ]
+    },
+    "markSaved": {
+      "description": "Marks the current widget rows as saved."
+    },
+    "removeRowsById": {
+      "description": "Removes rows from the widget by asset ID.",
+      "parameters": [
+        {
+          "name": "rawIds",
+          "type": "string"
+        }
+      ]
     },
     "clearData": {
-      "description": "Clears the current widget data and selection."
+      "description": "Clears widget data and selection."
     }
   },
   "events": {
@@ -79,7 +104,7 @@
       "description": "Triggered when the widget is ready."
     },
     "onDataChange": {
-      "description": "Triggered when assets are loaded, selected, edited, cleared, or when an action is requested."
+      "description": "Triggered when data is loaded, selected, edited, cleared, saved, or when deletion is requested."
     }
   }
 }
