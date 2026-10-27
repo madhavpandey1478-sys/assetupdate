@@ -41,7 +41,8 @@
       "parameters": [
         {
           "name": "data",
-          "type": "string"
+          "type": "string",
+          "description": "Serialized JSON array containing asset rows and their properties."
         }
       ]
     },
@@ -50,15 +51,18 @@
       "parameters": [
         {
           "name": "rowIndex",
-          "type": "integer"
+          "type": "integer",
+          "description": "Zero-based row index."
         },
         {
           "name": "fieldName",
-          "type": "string"
+          "type": "string",
+          "description": "Technical field name."
         },
         {
           "name": "value",
-          "type": "string"
+          "type": "string",
+          "description": "New property value."
         }
       ]
     },
@@ -75,6 +79,25 @@
       "parameters": [
         {
           "name": "fieldName",
+          "type": "string",
+          "description": "Field key, such as company, costCenter, or assetClass."
+        },
+        {
+          "name": "rawOptions",
+          "type": "string",
+          "description": "Serialized JSON array of dropdown options."
+        }
+      ]
+    },
+    "setRowOptions": {
+      "description": "Sets dropdown options for a specific row and field.",
+      "parameters": [
+        {
+          "name": "rowIndex",
+          "type": "integer"
+        },
+        {
+          "name": "fieldName",
           "type": "string"
         },
         {
@@ -84,19 +107,29 @@
       ]
     },
     "markSaved": {
-      "description": "Marks the current widget rows as saved."
+      "description": "Marks all current widget rows as saved."
     },
     "removeRowsById": {
       "description": "Removes rows from the widget by asset ID.",
       "parameters": [
         {
           "name": "rawIds",
-          "type": "string"
+          "type": "string",
+          "description": "Serialized JSON array of asset IDs."
         }
       ]
     },
     "clearData": {
       "description": "Clears widget data and selection."
+    },
+    "setStatus": {
+      "description": "Sets the widget status message.",
+      "parameters": [
+        {
+          "name": "message",
+          "type": "string"
+        }
+      ]
     }
   },
   "events": {
@@ -104,7 +137,7 @@
       "description": "Triggered when the widget is ready."
     },
     "onDataChange": {
-      "description": "Triggered when data is loaded, selected, edited, cleared, saved, or when deletion is requested."
+      "description": "Triggered when assets are loaded, selected, edited, cleared, saved, or when an action is requested."
     }
   }
 }
