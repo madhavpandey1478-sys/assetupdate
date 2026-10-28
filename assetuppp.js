@@ -2,54 +2,25 @@
 (function () {
   "use strict";
 
-  /*
-   * MODIFY ASSET - SAP ANALYTICS CLOUD CUSTOM WIDGET
-   *
-   * Asset ID                  : Read-only
-   * Description               : Editable text input
-   * Company                   : Dropdown
-   * Cost Center               : Dropdown
-   * Asset Class               : Dropdown
-   * Capitalized Month         : Month/year picker
-   * Asset Additional Description : Editable text input
-   *
-   * Model updates and deletion are handled by SAC story scripting.
-   */
+  /* =========================================================
+     MODIFY ASSET - STANDALONE SAC CUSTOM WIDGET
+     Component tag: com-madhav-modifyasset
+
+     Read-only: Asset ID
+     Editable text: Description, Asset Additional Description
+     Dropdowns: Company, Cost Center, Asset Class
+     Month picker: Capitalized Month
+
+     Model updates/deletion are performed by SAC story scripting.
+     ========================================================= */
 
   var FIELDS = [
-    {
-      key: "description",
-      label: "Description",
-      width: 260,
-      text: true
-    },
-    {
-      key: "company",
-      label: "Company",
-      width: 180
-    },
-    {
-      key: "costCenter",
-      label: "Cost Center",
-      width: 190
-    },
-    {
-      key: "assetClass",
-      label: "Asset Class",
-      width: 180
-    },
-    {
-      key: "capitalizedMonth",
-      label: "Capitalized Month",
-      width: 200,
-      month: true
-    },
-    {
-      key: "additionalDescription",
-      label: "Asset Additional Description",
-      width: 320,
-      text: true
-    }
+    { key: "description", label: "Description", width: 260, text: true },
+    { key: "company", label: "Company", width: 180 },
+    { key: "costCenter", label: "Cost Center", width: 190 },
+    { key: "assetClass", label: "Asset Class", width: 180 },
+    { key: "capitalizedMonth", label: "Capitalized Month", width: 200, month: true },
+    { key: "additionalDescription", label: "Asset Additional Description", width: 320, text: true }
   ];
 
   var STYLE = `
@@ -59,8 +30,9 @@
       height: 100%;
       min-height: 220px;
       font-family: "72", "72full", Arial, sans-serif;
-      color: #1d2d3e;
+      color: #17365d;
       box-sizing: border-box;
+      background: #fff;
     }
 
     * {
@@ -74,31 +46,39 @@
       height: 100%;
       min-height: 220px;
       background: #fff;
-      border: 1px solid #d8e0e8;
+      border: 1px solid #d7e1ef;
+      border-radius: 4px;
       overflow: hidden;
     }
 
     .toolbar {
       display: flex;
       align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
+      gap: 8px;
+      flex-wrap: nowrap;
+      min-height: 62px;
       padding: 10px 12px;
-      background: #f5f7fa;
-      border-bottom: 1px solid #e5e9ee;
+      background: #f7faff;
+      border-bottom: 1px solid #dce6f2;
     }
 
     .search {
       height: 38px;
-      width: min(320px, 100%);
-      min-width: 170px;
+      width: 286px;
+      max-width: 28%;
+      min-width: 180px;
+      flex: 0 1 286px;
       padding: 0 12px;
-      border: 1px solid #c9d6e3;
+      border: 1px solid #cbd9eb;
       border-radius: 7px;
       background: #fff;
-      color: #1d2d3e;
+      color: #17365d;
       font: 13px "72", Arial, sans-serif;
       outline: none;
+    }
+
+    .search::placeholder {
+      color: #70829a;
     }
 
     .search:focus {
@@ -106,24 +86,43 @@
       box-shadow: 0 0 0 2px #0a6ed11f;
     }
 
+    #visibleCount {
+      font-size: 12px;
+      color: #58708e;
+      white-space: nowrap;
+      margin-right: 8px;
+    }
+
     .spacer {
       flex: 1;
+      min-width: 8px;
     }
 
     button {
-      height: 36px;
-      padding: 0 15px;
-      border: 1px solid #c5d9f3;
+      height: 34px;
+      min-width: 68px;
+      padding: 0 14px;
+      border: 1px solid #c9d9ef;
       border-radius: 7px;
       background: #fff;
-      color: #0064d9;
-      font: 700 13px "72", Arial, sans-serif;
+      color: #0866d6;
+      font: 600 12px "72", Arial, sans-serif;
       cursor: pointer;
       white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
     }
 
     button:hover {
-      background: #f2f7ff;
+      background: #f0f6ff;
+      border-color: #a9c8f1;
+    }
+
+    button:focus-visible {
+      outline: 2px solid #0a6ed1;
+      outline-offset: 1px;
     }
 
     button:disabled {
@@ -132,43 +131,56 @@
     }
 
     button.primary {
-      background: #0a6ed1;
-      border-color: #0a6ed1;
+      background: #0866d6;
+      border-color: #0866d6;
       color: #fff;
     }
 
     button.primary:hover {
-      background: #085caf;
+      background: #0758b8;
     }
 
     button.delete {
       display: none;
-      color: #bb0000;
-      border-color: #e6b5b5;
+      color: #c00000;
+      border-color: #e8baba;
       background: #fff;
+    }
+
+    button.delete:hover {
+      background: #fff5f5;
     }
 
     .paging {
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      gap: 10px;
-      flex-wrap: wrap;
-      padding: 8px 12px;
-      border-bottom: 1px solid #e5e9ee;
-      color: #5b6b7b;
+      gap: 9px;
+      flex-wrap: nowrap;
+      min-height: 48px;
+      padding: 7px 12px;
+      border-bottom: 1px solid #e0e8f2;
+      background: #fff;
+      color: #5f7390;
       font-size: 12px;
     }
 
     .paging button {
-      height: 30px;
-      padding: 0 10px;
+      height: 32px;
+      min-width: 70px;
+      padding: 0 12px;
+    }
+
+    #showing,
+    #pageLabel {
+      white-space: nowrap;
     }
 
     .table-wrap {
       flex: 1;
       min-height: 100px;
       overflow: auto;
+      background: #fff;
     }
 
     table {
@@ -183,11 +195,11 @@
       position: sticky;
       top: 0;
       z-index: 2;
-      height: 44px;
+      height: 42px;
       padding: 0 10px;
-      background: #eef2f7;
-      color: #1d2d3e;
-      border-bottom: 1px solid #dfe6ed;
+      background: #edf3fb;
+      color: #17365d;
+      border-bottom: 1px solid #d8e3f1;
       font-size: 12px;
       font-weight: 700;
       text-align: left;
@@ -195,23 +207,23 @@
     }
 
     td {
-      height: 54px;
-      padding: 7px 8px;
-      border-bottom: 1px solid #e5e9ee;
+      height: 51px;
+      padding: 6px 8px;
+      border-bottom: 1px solid #e2eaf4;
       background: #fff;
       vertical-align: middle;
     }
 
     tr:hover td {
-      background: #fafbfd;
+      background: #fbfdff;
     }
 
     tr.selected td {
-      background: #eef6ff;
+      background: #fff9e9;
     }
 
     tr.selected:hover td {
-      background: #e3f0ff;
+      background: #fff5dc;
     }
 
     .check-cell {
@@ -224,16 +236,21 @@
     input[type=checkbox] {
       width: 18px;
       height: 18px;
-      accent-color: #0a6ed1;
+      accent-color: #0875e1;
       cursor: pointer;
+      vertical-align: middle;
     }
 
     .asset-id {
-      padding: 7px 10px;
-      background: #eff2f6;
-      border: 1px solid #dde4ec;
-      border-radius: 5px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      background: #f4f7fb;
+      border: 1px solid #d5e0ef;
+      border-radius: 6px;
       font-size: 12px;
+      color: #46617f;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -242,51 +259,57 @@
     .cell {
       width: 100%;
       min-width: 0;
-      height: 36px;
-      padding: 0 9px;
-      border: 1px solid #c9d6e3;
-      border-radius: 5px;
+      height: 35px;
+      padding: 0 10px;
+      border: 1px solid #cbd9eb;
+      border-radius: 6px;
       background: #fff;
-      color: #1d2d3e;
+      color: #17365d;
       font: 12px "72", Arial, sans-serif;
       outline: none;
     }
 
     select.cell {
-      padding-right: 25px;
+      padding-right: 24px;
+      cursor: pointer;
     }
 
     input.cell {
       padding-right: 9px;
     }
 
+    input[type=month].cell {
+      color: #47617f;
+    }
+
     .cell:focus {
-      border-color: #0a6ed1;
-      box-shadow: 0 0 0 2px #0a6ed11f;
+      border-color: #0875e1;
+      box-shadow: 0 0 0 1px #0875e133;
     }
 
     .empty {
       height: 70px;
       padding: 25px;
       text-align: center;
-      color: #748596;
+      color: #7489a3;
       font-size: 13px;
     }
 
     .status {
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 16px;
       flex-wrap: wrap;
-      padding: 9px 12px;
-      background: #f5f7fa;
-      border-top: 1px solid #e5e9ee;
-      color: #5b6b7b;
-      font-size: 12px;
+      min-height: 34px;
+      padding: 7px 10px;
+      background: #f7faff;
+      border-top: 1px solid #dce6f2;
+      color: #617895;
+      font-size: 11px;
     }
 
     .strong {
-      color: #1d2d3e;
+      color: #17365d;
       font-weight: 700;
     }
 
@@ -295,17 +318,25 @@
       white-space: normal;
     }
 
-    @media(max-width: 700px) {
+    @media(max-width: 1000px) {
       .toolbar {
-        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .search {
+        max-width: none;
+      }
+
+      .spacer {
+        flex: 1;
+      }
+
+      .paging {
+        flex-wrap: wrap;
       }
 
       .message {
         margin-left: 0;
-      }
-
-      button {
-        padding: 0 10px;
       }
     }
   `;
@@ -313,34 +344,29 @@
   var template = document.createElement("template");
 
   template.innerHTML =
-    "<style>" + STYLE + "</style>" +
+    '<style>' + STYLE + '</style>' +
     '<div class="root">' +
       '<div class="toolbar">' +
-        '<input id="search" class="search" type="search" ' +
-          'placeholder="Search Asset ID or description..." ' +
-          'aria-label="Search assets">' +
+        '<input id="search" class="search" type="search" placeholder="Search Asset ID or Description..." aria-label="Search assets">' +
         '<span id="visibleCount">Visible: 0</span>' +
         '<span class="spacer"></span>' +
         '<button id="loadBtn">Load Data</button>' +
-        '<button id="deleteBtn" class="delete">Delete Selected</button>' +
         '<button id="saveBtn" class="primary">Save Changes</button>' +
+        '<button id="deleteBtn" class="delete">Delete Selected</button>' +
         '<button id="clearBtn">Clear</button>' +
       '</div>' +
-
       '<div class="paging">' +
         '<span id="showing">Showing 0 to 0 of 0</span>' +
         '<button id="prevBtn">Previous</button>' +
         '<span id="pageLabel">Page 1 of 1</span>' +
         '<button id="nextBtn">Next</button>' +
       '</div>' +
-
       '<div class="table-wrap">' +
         '<table>' +
           '<thead><tr id="headRow"></tr></thead>' +
           '<tbody id="bodyRows"></tbody>' +
         '</table>' +
       '</div>' +
-
       '<div class="status">' +
         '<span>Total Rows: <span class="strong" id="total">0</span></span>' +
         '<span>Selected Rows: <span class="strong" id="selected">0</span></span>' +
@@ -801,10 +827,8 @@
 
           options.forEach(function (optionData) {
             var option = document.createElement("option");
-
             option.value = optionData.value;
             option.textContent = optionData.text;
-
             input.appendChild(option);
           });
 
@@ -853,9 +877,9 @@
       return tr;
     }
 
-    /* =====================================================
+    /* =========================================================
        PUBLIC METHODS EXPOSED TO SAC STORY SCRIPTING
-       ===================================================== */
+       ========================================================= */
 
     getLastEvent() {
       return this._lastEvent;
